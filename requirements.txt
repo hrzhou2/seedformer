@@ -1,0 +1,9 @@
+easydict
+h5py
+matplotlib
+numpy
+open3d==0.9.0.0
+opencv-python
+pprint
+scipy
+torch==1.8.1
