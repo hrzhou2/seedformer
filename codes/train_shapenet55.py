@@ -2,7 +2,7 @@
 ==============================================================
 
 SeedFormer: Point Cloud Completion
--> Training on PCN dataset
+-> Training on ShapeNet-55/34
 
 ==============================================================
 
@@ -42,10 +42,11 @@ parser.add_argument('--test', dest='test', help='Test neural networks', action='
 parser.add_argument('--inference', dest='inference', help='Inference for benchmark', action='store_true')
 parser.add_argument('--output', type=int, default=False, help='Output testing results.')
 parser.add_argument('--pretrained', type=str, default='', help='Pretrained path for testing.')
+parser.add_argument('--mode', type=str, default='median', help='Testing mode [easy, median, hard].')
 args = parser.parse_args()
 
 
-def PCNConfig():
+def ShapeNet55Config():
 
     #######################
     # Configuration for PCN
@@ -58,24 +59,18 @@ def PCNConfig():
     # Dataset Config
     #
     __C.DATASETS                                     = edict()
-    __C.DATASETS.COMPLETION3D                        = edict()
-    __C.DATASETS.COMPLETION3D.CATEGORY_FILE_PATH     = './datasets/Completion3D.json'
-    __C.DATASETS.COMPLETION3D.PARTIAL_POINTS_PATH    = '/path/to/datasets/Completion3D/%s/partial/%s/%s.h5'
-    __C.DATASETS.COMPLETION3D.COMPLETE_POINTS_PATH   = '/path/to/datasets/Completion3D/%s/gt/%s/%s.h5'
-    __C.DATASETS.SHAPENET                            = edict()
-    __C.DATASETS.SHAPENET.CATEGORY_FILE_PATH         = './datasets/ShapeNet.json'
-    __C.DATASETS.SHAPENET.N_RENDERINGS               = 8
-    __C.DATASETS.SHAPENET.N_POINTS                   = 2048
-    __C.DATASETS.SHAPENET.PARTIAL_POINTS_PATH        = '<*PATH-TO-YOUR-DATASET*>/PCN/%s/partial/%s/%s/%02d.pcd'
-    __C.DATASETS.SHAPENET.COMPLETE_POINTS_PATH       = '<*PATH-TO-YOUR-DATASET*>/PCN/%s/complete/%s/%s.pcd'
+    __C.DATASETS.SHAPENET55                          = edict()
+    __C.DATASETS.SHAPENET55.CATEGORY_FILE_PATH       = './datasets/ShapeNet55-34/ShapeNet-55/'
+    __C.DATASETS.SHAPENET55.N_POINTS                 = 2048
+    __C.DATASETS.SHAPENET55.COMPLETE_POINTS_PATH     = '<*PATH-TO-YOUR-DATASET*>/ShapeNet55/shapenet_pc/%s'
 
     #
     # Dataset
     #
     __C.DATASET                                      = edict()
     # Dataset Options: Completion3D, ShapeNet, ShapeNetCars, Completion3DPCCT
-    __C.DATASET.TRAIN_DATASET                        = 'ShapeNet'
-    __C.DATASET.TEST_DATASET                         = 'ShapeNet'
+    __C.DATASET.TRAIN_DATASET                        = 'ShapeNet55'
+    __C.DATASET.TEST_DATASET                         = 'ShapeNet55'
 
     #
     # Constants
@@ -99,7 +94,7 @@ def PCNConfig():
     # Network
     #
     __C.NETWORK                                      = edict()
-    __C.NETWORK.UPSAMPLE_FACTORS                     = [1, 4, 8] # 16384
+    __C.NETWORK.UPSAMPLE_FACTORS                     = [1, 4, 4]
 
     #
     # Train
@@ -107,16 +102,12 @@ def PCNConfig():
     __C.TRAIN                                        = edict()
     __C.TRAIN.BATCH_SIZE                             = 48
     __C.TRAIN.N_EPOCHS                               = 400
-    __C.TRAIN.SAVE_FREQ                              = 25
     __C.TRAIN.LEARNING_RATE                          = 0.001
-    __C.TRAIN.LR_MILESTONES                          = [50, 100, 150, 200, 250]
-    __C.TRAIN.LR_DECAY_STEP                          = 50
-    __C.TRAIN.WARMUP_STEPS                           = 200
+    __C.TRAIN.LR_DECAY                               = 100
     __C.TRAIN.WARMUP_EPOCHS                          = 20
     __C.TRAIN.GAMMA                                  = .5
     __C.TRAIN.BETAS                                  = (.9, .999)
     __C.TRAIN.WEIGHT_DECAY                           = 0
-    __C.TRAIN.LR_DECAY                               = 150
 
     #
     # Test
@@ -185,7 +176,7 @@ def train_net(cfg):
 
     Model = import_module(args.net_model)
     model = Model.__dict__[args.arch_model](up_factors=cfg.NETWORK.UPSAMPLE_FACTORS)
-    print(model)
+    #print(model)
     if torch.cuda.is_available():
         model = torch.nn.DataParallel(model).cuda()
 
@@ -268,7 +259,7 @@ def test_net(cfg):
     manager = Manager(model, cfg)
 
     # Start training
-    manager.test(cfg, model, val_data_loader, outdir=cfg.DIR.RESULTS if args.output else None)
+    manager.test(cfg, model, val_data_loader, outdir=cfg.DIR.RESULTS if args.output else None, mode=args.mode)
         
 
 def set_seed(seed):
@@ -286,7 +277,7 @@ if __name__ == '__main__':
     print('cuda available ', torch.cuda.is_available())
 
     # Init config
-    cfg = PCNConfig()
+    cfg = ShapeNet55Config()
 
     # setting
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"

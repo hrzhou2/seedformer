@@ -4,7 +4,7 @@
 
 This repository contains PyTorch implementation for **SeedFormer: Patch Seeds based Point Cloud Completion with Upsample Transformer** (ECCV 2022).
 
-SeedFormer presents a novel method for *Point Cloud Completion*. In this work, we introduce a new representation, namely **Patch Seeds**, which not only captures general structures from partial inputs but also preserves distinctive information of local patterns. Moreover, we devise a novel **Upsample Transformer** by extending the transformer structure into basic operations of generating points, which explicitly incorporates spatial and semantic relationships in the local neighborhood. 
+SeedFormer presents a novel method for *Point Cloud Completion*. In this work, we introduce a new shape representation, namely **Patch Seeds**, which not only captures general structures from partial inputs but also preserves regional information of local patterns. Moreover, we devise a novel **Upsample Transformer** by extending the transformer structure into basic operations of point generators, which explicitly incorporates spatial and semantic relationships in the local neighborhood. 
 
 
 ## 🔥Updates
@@ -30,9 +30,7 @@ Compile the C++ extension modules:
 
 ## Datasets
 
-Download dataset files from [here](https://drive.google.com/drive/folders/1SJIbQATMMbq3UIWzl0YX43KDZz8t6OlG?usp=sharing).
-
-The details of used datasets can be found in [DATASET.md](./DATASET.md) (thank the authors of PoinTr).
+The details of used datasets can be found in [DATASET.md](./DATASET.md) (we thank the authors of PoinTr).
 
 
 ## Usage
@@ -61,6 +59,17 @@ Or you can give the model directory name to test one particular model:
 Save generated complete point clouds as well as gt and partial clouds in testing:
 
     python3 train_pcn.py --test --output 1
+
+### Training on ShapeNet-55/34
+
+For ShapeNet55 dataset, you should use:
+
+    python3 train_shapenet55.py
+
+In order to switch to ShapeNet34, you can change the data file in `train_shapenet55.py`:
+
+    __C.DATASETS.SHAPENET55.CATEGORY_FILE_PATH       = './datasets/ShapeNet55-34/ShapeNet-34/' # ShapeNet-55 or ShapeNet-34
+    __C.DATASETS.SHAPENET55.COMPLETE_POINTS_PATH     = '<*PATH-TO-YOUR-DATASET*>/ShapeNet55/shapenet_pc/%s'
 
 
 ## Acknowledgement
