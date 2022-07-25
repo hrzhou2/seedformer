@@ -1,9 +1,3 @@
-# --------------------------------------------------------
-# SeedFormer
-# Copyright (c) 2022 Intelligent Media Pervasive, Recognition & Understanding Lab of NJU - All Rights Reserved
-# Licensed under The MIT License [see LICENSE for details]
-# Written by Haoran Zhou
-# --------------------------------------------------------
 
 '''
 ==============================================================
