@@ -2,6 +2,8 @@
 
 ![example](./pictures/teaser.png)
 
+[[paper]](https://arxiv.org/abs/2207.10315) [[Dataset]](./DATASET.md)
+
 This repository contains PyTorch implementation for **SeedFormer: Patch Seeds based Point Cloud Completion with Upsample Transformer** (ECCV 2022).
 
 SeedFormer presents a novel method for *Point Cloud Completion*. In this work, we introduce a new shape representation, namely **Patch Seeds**, which not only captures general structures from partial inputs but also preserves regional information of local patterns. Moreover, we devise a novel **Upsample Transformer** by extending the transformer structure into basic operations of point generators, which explicitly incorporates spatial and semantic relationships in the local neighborhood. 
