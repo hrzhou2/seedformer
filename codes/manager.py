@@ -197,6 +197,7 @@ class Manager:
 
             # Validate the current model
             cd_eval = self.validate(cfg, model=model, val_data_loader=val_data_loader)
+            self.train_record('Testing scores = {:.4f}'.format(cd_eval))
 
             # Save checkpoints
             if cd_eval < self.best_metrics:
@@ -258,7 +259,7 @@ class Manager:
 
         # Record testing results
         message = '#{:d} {:.4f} {:.4f} {:.4f} {:.4f} | {:.4f} | #{:d} {:.4f}'.format(self.epoch, test_losses.avg(0), test_losses.avg(1), test_losses.avg(2), test_losses.avg(4), test_losses.avg(3), self.best_epoch, self.best_metrics)
-        self.test_record(message)
+        self.test_record(message. show_info=False)
 
         return test_losses.avg(3)
 

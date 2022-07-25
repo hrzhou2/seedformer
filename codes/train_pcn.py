@@ -185,7 +185,7 @@ def train_net(cfg):
 
     Model = import_module(args.net_model)
     model = Model.__dict__[args.arch_model](up_factors=cfg.NETWORK.UPSAMPLE_FACTORS)
-    print(model)
+    # print(model)
     if torch.cuda.is_available():
         model = torch.nn.DataParallel(model).cuda()
 

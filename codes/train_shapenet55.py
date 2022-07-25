@@ -229,7 +229,9 @@ def test_net(cfg):
 
 
     # Set up folders for logs and checkpoints
-    cfg.DIR.TEST_PATH = os.path.join(cfg.DIR.TEST_PATH, cfg.DIR.PRETRAIN)
+    testset_name = cfg.DATASETS.SHAPENET55.CATEGORY_FILE_PATH
+    testset_name = os.path.basename(testset_name.strip('/'))
+    cfg.DIR.TEST_PATH = os.path.join(cfg.DIR.TEST_PATH, cfg.DIR.PRETRAIN, testset_name, args.mode)
     cfg.DIR.RESULTS = os.path.join(cfg.DIR.TEST_PATH, 'outputs')
     cfg.DIR.LOGS = cfg.DIR.TEST_PATH
     print('Saving outdir: {}'.format(cfg.DIR.TEST_PATH))
