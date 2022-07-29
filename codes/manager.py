@@ -259,7 +259,7 @@ class Manager:
 
         # Record testing results
         message = '#{:d} {:.4f} {:.4f} {:.4f} {:.4f} | {:.4f} | #{:d} {:.4f}'.format(self.epoch, test_losses.avg(0), test_losses.avg(1), test_losses.avg(2), test_losses.avg(4), test_losses.avg(3), self.best_epoch, self.best_metrics)
-        self.test_record(message. show_info=False)
+        self.test_record(message, show_info=False)
 
         return test_losses.avg(3)
 
